@@ -10,20 +10,18 @@
 <div class="container">
     <div class="card w-50 mx-auto" style="margin-top: 50px">
         <div th:if="${rol != '[ROLE_ADMIN]'}" class="card-header">
-            Modificar rol de <span th:text="${usuario.get().nombre}"></span>
+            Modificar rol de <span th:text="${usuario.nombre}"></span>
         </div>
 
         <div class="card-body">
 
-            <form id="formularioRol" role="form" th:action="@{/usuarioModificado}" th:object="${usuario}" method="post">
+           <form id="formularioRol" role="form" th:action="@{/usuarioModificado}" th:object="${usuario}" method="post">
                 <div class="row mb-3">
                     <div class="form-group col-6">
                         <div class="form-group" id="user-group">
                             <input id="pass" name="id" hidden type="text" class="form-control"
                                    th:value="${id}"/>
                         </div>
-
-                        <!--                         <h1 th:text="${rol}"> </h1> -->
 
                         <div th:if="${username eq autoridad}" class="form-group">
                             <input type="text" name="nombre" id="nombre1"
@@ -73,7 +71,7 @@
                                    class="form-control" placeholder="Confirme su contraseña"
                                    name="confirmacionContrasena" th:value="${confirmacionContrasena}">
                         </div>
-                    </div>
+                    </div> 
 
 
                     <div class="form-group">
@@ -84,15 +82,23 @@
 
                     </div>
 
-                </div>
-            </form>
-
+                 <div class="card-footer">
+            <input type="submit" value="Guardar"  class="btn btn-success" form="formularioRol" >
+               
         </div>
-        <div class="card-footer">
-            <input type="submit" value="Guardar" class="btn btn-success" form="formularioRol">
+         </div>
+         
+                
+</form>    
         </div>
+        
+        
+         
+        
     </div>
+    
 </div>
+
 
 <div th:replace="layout/app :: scripts"></div>
 

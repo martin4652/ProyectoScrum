@@ -202,11 +202,13 @@ public class ProyectoController {
         Authentication auth = usuarioController.retornarUsuarioLogueado();
 //		
         UserDetails userDetail = (UserDetails) auth.getPrincipal();
+        
+        
 //
         Usuario user = usuarioDAO.findByUserName(userDetail.getUsername());
         List<Usuario> usuarios = new ArrayList();
 
-        List<Proyecto> proyectos = new ArrayList();
+        List<Proyecto> proyectos = proyectoImpl.buscarTodosLosProyectos();
 
         Proyecto proyect = (Proyecto) proyectoImpl.buscarPorIdProyecto(id);
 
@@ -218,6 +220,7 @@ public class ProyectoController {
         if (proyect.getUsuario().contains(user)) {
 
             user.setProyecto(null);
+            
 
             usuarioDAO.save(user);
         }

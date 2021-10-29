@@ -232,25 +232,24 @@ public class UsuarioController {
     //modifico los datos del usuario
     @GetMapping(value = "/modificar/{id}")
     public String modificarUsuario(@PathVariable(value = "id") Long id, RedirectAttributes flash, Model model) {
-        Optional<Usuario> usuario = Optional.ofNullable(new Usuario());
+        //Optional<Usuario> usuario = Optional.ofNullable(new Usuario());
 
         if (id > 0) {
 
             Authentication auth = retornarUsuarioLogueado();
             Usuario user = usuarioService.buscarPorId(id);
-            usuario = usuarioDAO.findById(id);
+            //usuario = usuarioDAO.findById(id);
 
             flash.addFlashAttribute("success", "Usuario  eliminado con éxito!");
             model.addAttribute("id", id);
-            model.addAttribute("usuario", usuario);
+            model.addAttribute("usuario", user);
             model.addAttribute("username", user.getUserName().toString());
             // model.addAttribute("autoridad",auth.getAuthorities().toString());
             model.addAttribute("autoridad", auth.getName());
             model.addAttribute("autoridad", auth.getAuthorities().toString());
 
-
         }
-        return "/admin/ModificarUsuariosPerfilAdmin";
+        return "/admin/modificarUsuariosPerfilAdmin";
     }
 
     // Perfil Usuario ver datos personales
@@ -355,12 +354,86 @@ public class UsuarioController {
         Usuario usuariose = new Usuario();
 
         model.addAttribute("usuario", usuariose);
+        
+        model.addAttribute("autoridad", auth.getAuthorities().toString());
 
 
         return "/admin/listadoUsuarios";
 
 
     }
+    
+  //Se procesan los cambios del Usuario, Perfil Administrador
+    @PostMapping("/modificarROL")
+    public String modificarRolUsuarios(Usuario usuario, Model model,@RequestParam(value = "id") Long id)
+             {
+
+        System.out.println("USUARIO ID  ES    " + usuario.getId());
+        
+        Authentication auth = retornarUsuarioLogueado();
+
+        Usuario user = usuarioService.buscarPorId(id);
+
+
+       // user.setNombre(usuario.getNombre());
+       // user.setApellido(usuario.getApellido());
+       // user.setCedula(usuario.getCedula());
+       // user.setMail(usuario.getMail());
+        user.setRol(usuario.getRol());
+        
+        //if(usuario.getRol()==null) {
+        	//String  tipoAutoridad =auth.getAuthorities().toString();
+        	
+        //	System.out.println(tipoAutoridad);
+        	
+        //	String autoridad = tipoAutoridad.replace("[", "").replace("]", "");
+        	
+        	//user.setRol(autoridad );
+       // }
+        
+       
+       
+        //user.setUserName(usuario.getUserName());
+//
+//        if (ws.passwordEncoder().matches(contrasena, user.getPassword())) {
+//
+//            if (!confirmacionContrasena.equals(nuevaContrasena)) {
+//
+//                return "/admin/modificarUsuariosPerfilAdmin";
+//
+//            }
+
+
+//            if (!nuevaContrasena.isEmpty()) {
+//
+//                String contra = ws.passwordEncoder().encode(nuevaContrasena);
+//                user.setPassword(contra);
+//            }
+//        }
+
+
+        usuarioDAO.save(user);
+
+        List<Usuario> usuarios = (List<Usuario>) usuarioDAO.findAll();
+       // if(usuarios.removeIf(t -> t.getUserName() == user.getUserName()))
+
+        model.addAttribute("usuarios", usuarios);
+        
+        Usuario usuariose = new Usuario();
+
+        model.addAttribute("usuario", usuariose);
+        
+        model.addAttribute("autoridad", auth.getAuthorities().toString());
+
+
+        return "/admin/listadoUsuarios";
+
+
+    }
+    
+    
+    
+    
 
     // Se procesan datos de la modificacion del  propio Usuario
 
